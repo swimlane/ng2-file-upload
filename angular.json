@@ -3,40 +3,38 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ng2-file-upload": {
-      "root": ".",
-      "sourceRoot": "src",
-      "projectType": "library",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "src/tsconfig.json",
-            "project": "src/ng-package.json"
-          }
-        }
-      }
-    },
     "ng2-file-upload-demo": {
-      "root": "demo",
-      "sourceRoot": "demo/src",
       "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "demo/dist",
-            "index": "demo/src/index.html",
-            "main": "demo/src/main.ts",
-            "tsConfig": "demo/src/tsconfig.json",
-            "assets": [
-              "demo/src/assets"
-            ],
-            "styles": [],
+            "outputPath": "dist/ng2-file-upload-demo",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "tsconfig.app.json",
+            "aot": false,
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.scss"],
             "scripts": []
           },
           "configurations": {
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -46,10 +44,16 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
-              "fileReplacements": [
+              "budgets": [
                 {
-                  "replace": "demo/src/environments/environment.ts",
-                  "with": "demo/src/environments/environment.prod.ts"
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
                 }
               ]
             }
@@ -65,31 +69,77 @@
               "browserTarget": "ng2-file-upload-demo:build:production"
             }
           }
-        }
-      }
-    },
-    "ng2-file-upload-test": {
-      "root": ".",
-      "sourceRoot": "test",
-      "projectType": "library",
-      "architect": {
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "ng2-file-upload-demo:build"
+          }
+        },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "test/test.ts",
-            "karmaConfig": "test/karma.conf.js",
-            "scripts": [],
-            "styles": [],
-            "tsConfig": "test/tsconfig.json"
+            "main": "src/test.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "tsconfig.spec.json",
+            "karmaConfig": "karma.conf.js",
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.scss"],
+            "scripts": []
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "src/tsconfig.json",
-              "demo/src/tsconfig.json",
-              "test/tsconfig.json"
+              "tsconfig.app.json",
+              "tsconfig.spec.json",
+              "e2e/tsconfig.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "e2e/protractor.conf.js",
+            "devServerTarget": "ng2-file-upload-demo:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "ng2-file-upload-demo:serve:production"
+            }
+          }
+        }
+      }
+    },
+    "ng2-file-upload": {
+      "projectType": "library",
+      "root": "projects/ng2-file-upload",
+      "sourceRoot": "projects/ng2-file-upload/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/ng2-file-upload/tsconfig.lib.json",
+            "project": "projects/ng2-file-upload/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ng2-file-upload/src/test.ts",
+            "tsConfig": "projects/ng2-file-upload/tsconfig.spec.json",
+            "karmaConfig": "projects/ng2-file-upload/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ng2-file-upload/tsconfig.lib.json",
+              "projects/ng2-file-upload/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -99,14 +149,5 @@
       }
     }
   },
-  "defaultProject": "ng2-file-upload-demo",
-  "schematics": {
-    "@schematics/angular:component": {
-      "prefix": "",
-      "styleext": "css"
-    },
-    "@schematics/angular:directive": {
-      "prefix": ""
-    }
-  }
+  "defaultProject": "ng2-file-upload-demo"
 }
