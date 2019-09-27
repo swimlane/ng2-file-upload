@@ -1,11 +1,22 @@
-import { Directive, EventEmitter, ElementRef, Input, HostListener, Output } from '@angular/core';
+import {
+  Directive,
+  EventEmitter,
+  ElementRef,
+  Input,
+  HostListener,
+  Output
+} from '@angular/core';
 
 import { FileUploader } from './file-uploader.class';
 
+// tslint:disable-next-line: directive-selector
 @Directive({ selector: '[ng2FileSelect]' })
 export class FileSelectDirective {
   @Input() public uploader: FileUploader;
-  @Output() public onFileSelected: EventEmitter<File[]> = new EventEmitter<File[]>();
+  // tslint:disable-next-line: no-output-on-prefix
+  @Output() public onFileSelected: EventEmitter<File[]> = new EventEmitter<
+    File[]
+  >();
 
   protected element: ElementRef;
 
@@ -27,9 +38,9 @@ export class FileSelectDirective {
 
   @HostListener('change')
   public onChange(): any {
-    let files = this.element.nativeElement.files;
-    let options = this.getOptions();
-    let filters = this.getFilters();
+    const files = this.element.nativeElement.files;
+    const options = this.getOptions();
+    const filters = this.getFilters();
 
     this.uploader.addToQueue(files, options, filters);
     this.onFileSelected.emit(files);

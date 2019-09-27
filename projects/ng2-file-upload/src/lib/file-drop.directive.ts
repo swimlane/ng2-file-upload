@@ -2,10 +2,12 @@ import { Directive, EventEmitter, ElementRef, HostListener, Input, Output } from
 
 import { FileUploader, FileUploaderOptions } from './file-uploader.class';
 
+// tslint:disable-next-line: directive-selector
 @Directive({ selector: '[ng2FileDrop]' })
 export class FileDropDirective {
   @Input() public uploader: FileUploader;
   @Output() public fileOver: EventEmitter<any> = new EventEmitter();
+  // tslint:disable-next-line: no-output-on-prefix
   @Output() public onFileDrop: EventEmitter<File[]> = new EventEmitter<File[]>();
 
   protected element: ElementRef;
@@ -24,13 +26,13 @@ export class FileDropDirective {
 
   @HostListener('drop', [ '$event' ])
   public onDrop(event: any): void {
-    let transfer = this._getTransfer(event);
+    const transfer = this._getTransfer(event);
     if (!transfer) {
       return;
     }
 
-    let options = this.getOptions();
-    let filters = this.getFilters();
+    const options = this.getOptions();
+    const filters = this.getFilters();
     this._preventAndStop(event);
     this.uploader.addToQueue(transfer.files, options, filters);
     this.fileOver.emit(false);
@@ -39,7 +41,7 @@ export class FileDropDirective {
 
   @HostListener('dragover', [ '$event' ])
   public onDragOver(event: any): void {
-    let transfer = this._getTransfer(event);
+    const transfer = this._getTransfer(event);
     if (!this._haveFiles(transfer.types)) {
       return;
     }

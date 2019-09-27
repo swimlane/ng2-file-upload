@@ -12,7 +12,9 @@ export interface Headers {
   value: string;
 }
 
-export interface ParsedResponseHeaders { [headerFieldName: string]: string }
+export interface ParsedResponseHeaders {
+  [headerFieldName: string]: string;
+}
 
 export interface FilterFunction {
   name: string;
@@ -37,7 +39,7 @@ export interface FileUploaderOptions {
   authTokenHeader?: string;
   additionalParameter?: { [key: string]: any };
   parametersBeforeFiles?: boolean;
-  formatDataFunction?: Function;
+  formatDataFunction?: any;
   formatDataFunctionIsAsync?: boolean;
 }
 
@@ -163,7 +165,9 @@ export class FileUploader {
   public uploadItem(value: FileItem): void {
     const index = this.getIndexOfItem(value);
     const item = this.queue[index];
-    const transport = this.options.isHTML5 ? '_xhrTransport' : '_iframeTransport';
+    const transport = this.options.isHTML5
+      ? '_xhrTransport'
+      : '_iframeTransport';
     item._prepareToUploading();
     if (this.isUploading) {
       return;

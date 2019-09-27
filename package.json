@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build:lib && ng build --prod",
+    "build": "npm run build:lib && ng build --prod",
     "build:lib": "ng build ng2-file-upload",
     "test": "ng test",
     "lint": "ng lint",

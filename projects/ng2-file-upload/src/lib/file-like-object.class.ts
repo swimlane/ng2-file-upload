@@ -1,5 +1,5 @@
 function isElement(node: any): boolean {
-  return !!(node && (node.nodeName || node.prop && node.attr && node.find));
+  return !!(node && (node.nodeName || (node.prop && node.attr && node.find)));
 }
 
 export class FileLikeObject {
@@ -11,11 +11,12 @@ export class FileLikeObject {
 
   public constructor(fileOrInput: any) {
     this.rawFile = fileOrInput;
-    let isInput = isElement(fileOrInput);
-    let fakePathOrObject = isInput ? fileOrInput.value : fileOrInput;
-    let postfix = typeof fakePathOrObject === 'string' ? 'FakePath' : 'Object';
-    let method = '_createFrom' + postfix;
-    (this as any)[ method ](fakePathOrObject);
+    const isInput = isElement(fileOrInput);
+    const fakePathOrObject = isInput ? fileOrInput.value : fileOrInput;
+    const postfix =
+      typeof fakePathOrObject === 'string' ? 'FakePath' : 'Object';
+    const method = '_createFrom' + postfix;
+    (this as any)[method](fakePathOrObject);
   }
 
   public _createFromFakePath(path: string): void {
@@ -25,7 +26,11 @@ export class FileLikeObject {
     this.name = path.slice(path.lastIndexOf('/') + path.lastIndexOf('\\') + 2);
   }
 
-  public _createFromObject(object: { size: number, type: string, name: string }): void {
+  public _createFromObject(object: {
+    size: number;
+    type: string;
+    name: string;
+  }): void {
     this.size = object.size;
     this.type = object.type;
     this.name = object.name;
