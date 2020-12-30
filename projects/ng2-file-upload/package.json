@@ -2,8 +2,8 @@
   "name": "@swimlane/ng2-file-upload",
   "version": "1.0.1",
   "peerDependencies": {
-    "@angular/common": "^8.2.7",
-    "@angular/core": "^8.2.7"
+    "@angular/common": "^11.0.0",
+    "@angular/core": "^11.0.0"
   },
   "contributors": [
     {
